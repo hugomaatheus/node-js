@@ -1,21 +1,19 @@
 const express = require('express');
+const nunjucks = require('nunjucks');
+const path = require('path');
+
 const app = express();
 
-app.get('/test', (req, res) => {
-  res.send('Whassup dogg');
+nunjucks.configure('views', {
+  autoescape: true,
+  express: app
 });
 
-app.use('/user', (req, res, next) => {
-  console.log('Logged');
-  next();
-});
+app.set('view engine', 'njk');
+app.set('views', path.join(__dirname, 'views'));
 
-app.get('/user', (req, res) => {
-  res.send('User: Hbg');
-});
-
-app.get('/user/name', (req, res) => {
-  res.send('User: Hugo Matheus');
+app.get('/', (req, res) => {
+  res.render('index', { names: ['Hbg', 'Hugo'] });
 });
 
 app.listen(3000);
